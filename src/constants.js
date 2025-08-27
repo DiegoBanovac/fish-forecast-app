@@ -1,5 +1,4 @@
-// Maps weather condition codes to categories.
-// Each key represents a weather type, with an array of codes from the weather API.
+
 export const weatherCodes = {
   clear: [1000],
   clouds: [1003, 1006, 1009],

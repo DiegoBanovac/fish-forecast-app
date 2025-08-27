@@ -27,7 +27,14 @@ function App() {
       return forecastTime >= currentHour && forecastTime <= next24hours;
     });
 
-    const filteredDataEvery2Hours = next24hoursData.filter((_, index) => index % 3 === 0);
+    const filteredDataEvery2Hours = next24hoursData
+      .filter((_, index) => index % 3 === 0)
+        .map(hour => ({
+          time: hour.time,
+          temp_c: hour.temp_c,
+          condition: hour.condition,
+          chance_of_rain: hour.chance_of_rain,
+        }));
     setHourlyForecast(filteredDataEvery2Hours);
   };
 
@@ -69,12 +76,10 @@ function App() {
       const response = await fetch(MARINE_URL);
       const data = await response.json();
 
-      // Access the tides array, default to empty array if not present
       const tideData = data.forecast.forecastday[0].day.tides[0]?.tide || [];
 
       setCurrentMarine({
-        // Use optional chaining (?.) to safely access properties
-        // and logical OR (||) to provide a default empty string if undefined
+       
         tide: tideData[0]?.tide_type || '',
         tideTime: tideData[0]?.tide_time || null,
         tide2: tideData[1]?.tide_type || '',
@@ -83,8 +88,8 @@ function App() {
         tideTime3: tideData[2]?.tide_time || null,
         tide4: tideData[3]?.tide_type || '',
         tideTime4: tideData[3]?.tide_time || null,
-        sea_temperature: data.forecast.forecastday[0].hour[0]?.water_temp_c, // Added optional chaining here too
-        moonPhase: data.forecast.forecastday[0].astro?.moon_phase, // Added optional chaining here too
+        sea_temperature: data.forecast.forecastday[0].hour[0]?.water_temp_c, 
+        moonPhase: data.forecast.forecastday[0].astro?.moon_phase, 
       });
     } catch (error) {
       console.log(error);

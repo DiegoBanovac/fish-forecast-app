@@ -1,4 +1,4 @@
-// WeekForecast.jsx
+
 
 import { weatherCodes } from "../constants"
 
@@ -8,12 +8,11 @@ const WeekForecast = ({ weeklyForecast }) => {
         return days[new Date(dateString).getDay()];
     };
 
-    // Function to calculate fishing score for a given day's forecast data
+
     const calculateDailyFishingScore = (dayData) => {
         let score = 0;
 
-        // 1. Moon Phase (Max 30 points)
-        // Using optional chaining (?) in case astro data is missing for some reason
+        
         const moonPhase = dayData.astro?.moon_phase; 
         if (moonPhase === 'Full Moon' || moonPhase === 'New Moon') {
             score += 30;
@@ -21,61 +20,60 @@ const WeekForecast = ({ weeklyForecast }) => {
             score += 15;
         }
 
-        // 2. Wind Speed (Max 25 points) - Using maxwind_kph for the day
+        
         const windSpeed = dayData.day.maxwind_kph;
-        if (windSpeed >= 5 && windSpeed <= 20) { // Light to moderate breeze often ideal
+        if (windSpeed >= 5 && windSpeed <= 20) { 
             score += 25;
-        } else if (windSpeed > 20 && windSpeed <= 40) { // Moderate to strong winds can still be fishable
+        } else if (windSpeed > 20 && windSpeed <= 40) { 
             score += 10;
         } 
-        // Very low or very high wind get 0 points for this factor
+        
 
-        // 3. Air Temperature (Max 25 points) - Using avgtemp_c for daily average
+      
         const airTemp = dayData.day.avgtemp_c;
-        // General good range for many species, adjust as per local fish species preference
+        
         if (airTemp >= 10 && airTemp <= 25) { 
             score += 25;
-        } else if ((airTemp >= 5 && airTemp < 10) || (airTemp > 25 && airTemp <= 30)) { // Tolerable but less ideal
+        } else if ((airTemp >= 5 && airTemp < 10) || (airTemp > 25 && airTemp <= 30)) {
             score += 10;
         }
-        // Extreme temperatures get 0 points for this factor
+       
 
-        // 4. Rain (Max 10 points) - Using totalprecip_mm for daily total
+        
         const rain = dayData.day.totalprecip_mm;
-        if (rain > 0.1 && rain <= 3) { // Light rain often good (washes food, lowers light)
+        if (rain > 0.1 && rain <= 3) {
             score += 10;
-        } else if (rain > 3 && rain <= 10) { // Moderate rain
+        } else if (rain > 3 && rain <= 10) { 
             score += 5;
-        } else if (rain > 10) { // Heavy rain usually negative (turbidity, discomfort)
-            score -= 5; // Deduct points for heavy rain
+        } else if (rain > 10) { 
+            score -= 5; 
         }
 
-        // 5. Cloud Cover (Max 10 points) - Infer from condition code
+        
         const conditionCode = dayData.day.condition.code;
-        // Find the category key in weatherCodes that includes the current condition code
+        
         const weatherIconKey = Object.keys(weatherCodes).find((icon) =>
             weatherCodes[icon].includes(conditionCode)
         );
 
-        // Classify general cloudiness based on weather icon key
+        
         if (weatherIconKey === 'cloudy' || weatherIconKey === 'overcast_day' || weatherIconKey === 'mist' || weatherIconKey === 'fog') {
-            score += 10; // Overcast/Cloudy conditions often good for fishing
+            score += 10; 
         } else if (weatherIconKey === 'partly_cloudy_day') {
-            score += 5; // Partly cloudy
+            score += 5; 
         } 
-        // Clear/Sunny conditions get 0 points for this factor
+        
 
-        // Ensure the score is within the 0-100 range
+        
         return Math.min(Math.max(Math.round(score), 0), 100);
     };
 
-    // Pronađi indeks današnjeg dana u nizu
+   
     const todayIndex = weeklyForecast.findIndex(day => 
         new Date(day.date).toDateString() === new Date().toDateString()
     );
 
-    // Ako postoji današnji dan, prikaži sljedećih 6 dana (preskoči današnji)
-    // Ako ne postoji, prikaži prvih 6 dana (fallback)
+    
     const forecastToShow = todayIndex >= 0 
         ? weeklyForecast.slice(todayIndex + 1, todayIndex + 7)
         : weeklyForecast.slice(0, 6);
@@ -87,7 +85,7 @@ const WeekForecast = ({ weeklyForecast }) => {
             </div>
             <div className="flex flex-row divide-x divide-[#2a384b] overflow-x-auto">
                 {forecastToShow.map((day, index) => {
-                    // Calculate the fishing score for each day
+                
                     const dailyFishingScore = calculateDailyFishingScore(day);
                     
                     return (
@@ -109,7 +107,6 @@ const WeekForecast = ({ weeklyForecast }) => {
                                     <span className="font-normal text-[#c0cbdc]"> / {Math.round(day.day.mintemp_c)}°</span>
                                 </h2>
                             </div>
-                            {/* Display Fishing Score below temperature */}
                             <div className="mt-2 text-center">
                                 <p className="text-sm text-[#c0cbdc] font-semibold">Aktivnost:</p>
                                 <div className="w-full bg-gray-700 rounded-full h-2">

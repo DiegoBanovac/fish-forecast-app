@@ -29,7 +29,7 @@ const DayForecast = ( {currentWeather} ) => {
                                 <h2 className="text-[#c0cbdc] font-semibold">Oborine</h2>
                             </div>
                             <div className="flex basis-2/3">
-                                <h2 className="text-2xl  text-white font-extrabold">{currentWeather.rain}<span>mm</span></h2>
+                                <h2 className="text-2xl  text-white font-extrabold">{currentWeather.rain}<span> mm</span></h2>
                             </div>
                         </div>
                     </div>
@@ -44,7 +44,7 @@ const DayForecast = ( {currentWeather} ) => {
                                 <h2 className="text-[#c0cbdc] font-semibold">Vjetar</h2>
                             </div>
                             <div className="flex basis-2/3">
-                                <h2 className="text-2xl  text-white font-extrabold">{currentWeather.wind}<span>kph</span></h2>
+                                <h2 className="text-2xl  text-white font-extrabold">{currentWeather.wind}<span> kph</span></h2>
                             </div>
                         </div>
                     </div>
