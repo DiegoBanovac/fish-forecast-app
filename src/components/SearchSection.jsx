@@ -5,8 +5,8 @@ const SearchSection = forwardRef(({ getWeatherDetails, getMarineDetails, city, s
     e.preventDefault();
     if (!city.trim()) return;
     
-    const API_URL = `https://fish-forecast-api.onrender.com/api/weather?city=${city}`;
-    const MARINE_URL = `https://fish-forecast-api.onrender.com/api/marine?city=${city}`;
+    const API_URL = `http://localhost:5000/api/weather?city=${city}`;
+    const MARINE_URL = `http://localhost:5000/api/marine?city=${city}`;
     getWeatherDetails(API_URL, city);
     getMarineDetails(MARINE_URL);
   };
@@ -15,8 +15,8 @@ const SearchSection = forwardRef(({ getWeatherDetails, getMarineDetails, city, s
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const {latitude, longitude} = position.coords;
-        const API_URL = `https://fish-forecast-api.onrender.com/api/weather?city=${latitude},${longitude}`;
-        const MARINE_URL = `https://fish-forecast-api.onrender.com/api/marine?city=${latitude},${longitude}`;
+        const API_URL = `http://localhost:5000/api/weather?city=${latitude},${longitude}`;
+        const MARINE_URL = `http://localhost:5000/api/marine?city=${latitude},${longitude}`;
         getWeatherDetails(API_URL);
         getMarineDetails(MARINE_URL);
       },
